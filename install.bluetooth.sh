@@ -1,11 +1,13 @@
 #!/bin/bash
 
-#kernel_version=$(uname -r | cut -d '-' -f1)  #ie 5.2.7
-kernel_version=$(rpm -qa | grep kernel-headers | cut -d '-' -f3)  #use latest installed kernel
+#kernel_version=$(uname -r | cut -d '-' -f1)  #ie 5.2.8
+kernel_version=$(rpm -qa | grep kernel-headers | cut -d '-' -f3)  # use latest installed kernel
+fedora_kernel=$(rpm -qa | grep kernel-headers | cut -d '-' -f3-)  # 5.2.8-200.fc30.x86_64
 major_version=$(echo $kernel_version | cut -d '.' -f1)
 minor_version=$(echo $kernel_version | cut -d '.' -f2)
 build_dir='build'
-update_dir="/lib/modules/$(uname -r)/updates"
+#update_dir="/lib/modules/$(uname -r)/updates"
+update_dir="/lib/modules/$fedora_kernel/updates"
 
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
