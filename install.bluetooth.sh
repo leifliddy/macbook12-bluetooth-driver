@@ -28,7 +28,7 @@ fi
 tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$kernel_version/drivers/bluetooth --directory=build/
 mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
-mv $bluetooth_dir/hci_bcm.c $hda_dir/hci_bcm.c.orig
+mv $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
 cp $patch_dir/Makefile $patch_dir/hci_bcm.c $bluetooth_dir/
 cd $bluetooth_dir
 make

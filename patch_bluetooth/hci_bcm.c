@@ -262,7 +262,6 @@ static int bcm_gpio_set_power(struct bcm_device *dev, bool powered)
 
 	return 0;
 
-	dev->set_shutdown(dev, !powered);
 err_txco_clk_disable:
 	if (powered && !dev->res_enabled)
 		clk_disable_unprepare(dev->txco_clk);
