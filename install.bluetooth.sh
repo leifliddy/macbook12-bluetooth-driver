@@ -1,18 +1,16 @@
 #!/bin/bash
 
-#kernel_version=$(uname -r | cut -d '-' -f1)  #ie 5.2.8
-kernel_version=$(rpm -qa | grep kernel-headers | cut -d '-' -f3)  # use latest installed kernel
-fedora_kernel=$(rpm -qa | grep kernel-headers | cut -d '-' -f3-)  # 5.2.8-200.fc30.x86_64
+kernel_version=$(uname -r | cut -d '-' -f1)  #ie 5.2.8
 major_version=$(echo $kernel_version | cut -d '.' -f1)
 minor_version=$(echo $kernel_version | cut -d '.' -f2)
 build_dir='build'
-#update_dir="/lib/modules/$(uname -r)/updates"
-update_dir="/lib/modules/$fedora_kernel/updates"
+update_dir="/lib/modules/$(uname -r)/updates"
 
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
 
 [[ ! -d $build_dir ]] && mkdir $build_dir
+[[ -d $bluetooth_dir ]] && rm/ -rf $bluetooth_dir
 
 # attempt to download linux-x.x.x.tar.xz kernel
 wget -c https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz -P $build_dir
@@ -25,6 +23,7 @@ fi
 
 [[ $? -ne 0 ]] && echo "kernel could not be downloaded...exiting" && exit
 
+echo "tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$kernel_version/drivers/bluetooth --directory=build/"
 tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$kernel_version/drivers/bluetooth --directory=build/
 mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
