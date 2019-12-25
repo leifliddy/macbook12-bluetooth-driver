@@ -25,7 +25,7 @@ dnf install wget make gcc kernel-devel
 **ubuntu package install**
 ```
 apt install wget make gcc linux-headers-generic
-
+```
 
 
 **build and install driver**
