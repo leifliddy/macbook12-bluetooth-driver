@@ -22,6 +22,5 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 
 install:
-	xz hci_uart.ko
-	cp hci_uart.ko.xz /lib/modules/$(shell uname -r)/updates
+	cp hci_uart.ko /lib/modules/$(shell uname -r)/updates
 	depmod -a
