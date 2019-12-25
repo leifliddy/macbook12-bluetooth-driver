@@ -1,4 +1,5 @@
-Patch/Compile/Install *hci_uart* driver for
+Patch/Compile/Install hci_uart driver for
+
 Macbook Pro models: 13,1 and 14,1
 Macbook 12 inch models (2015 and later): 8,1 + 9,1 + 10,1
 
