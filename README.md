@@ -1,4 +1,4 @@
-Patch/Compile/Install **hci_uart** driver for
+Patch/Compile/Install bluetooth driver for
 
 Macbook Pro models: 13,1 and 14,1
 
