@@ -10,7 +10,7 @@ patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
 
 [[ ! -d $build_dir ]] && mkdir $build_dir
-[[ -d $bluetooth_dir ]] && rm/ -rf $bluetooth_dir
+[[ -d $bluetooth_dir ]] && rm -rf $bluetooth_dir
 
 # attempt to download linux-x.x.x.tar.xz kernel
 wget -c https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz -P $build_dir
