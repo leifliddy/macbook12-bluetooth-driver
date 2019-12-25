@@ -3,7 +3,7 @@ Patch/Compile/Install bluetooth driver for
 Macbook Pro models: 13,1 and 14,1  
 Macbook 12 inch models (2015 and later): 8,1 + 9,1 + 10,1  
 
-**Kernels support**:  
+**Kernels supported**:  
 5.0 and higher. 
 Should also work with 4.x kernels. Need someone to test this out.
 
