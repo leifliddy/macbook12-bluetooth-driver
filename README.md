@@ -1,12 +1,10 @@
 Patch/Compile/Install bluetooth driver for
 
-Macbook Pro models: 13,1 and 14,1
+Macbook Pro models: 13,1 and 14,1  
+Macbook 12 inch models (2015 and later): 8,1 + 9,1 + 10,1  
 
-Macbook 12 inch models (2015 and later): 8,1 + 9,1 + 10,1
 
-
-**Patch info**:
-
+**Patch info**:  
 https://github.com/christophgysin/linux/commit/ddf622a0a19697af473051c8019fffc1eb66efe7
 
 
@@ -14,7 +12,7 @@ https://github.com/christophgysin/linux/commit/ddf622a0a19697af473051c8019fffc1e
 *Installation Instructions*
 -------------
 
-*prerequisites* 
+**prerequisites** 
 Enure the necessary packages are installed:
  
 
