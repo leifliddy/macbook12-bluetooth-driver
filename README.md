@@ -42,5 +42,5 @@ reboot
 
 
 ```install.bluetooth.sh``` is designed to be run on the Macbook itself (running Linux obviously).  
-It will compile ```hci_uart``` for the currently running/active kernel (based on the ```uname -r``` output)  
+It will compile the ```hci_uart``` module (bluetooth driver) for the currently running/active kernel (based on the ```uname -r``` output)  
 However, this script can be easily modified to suit any number of use-case scenarios. 
