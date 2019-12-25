@@ -10,7 +10,8 @@ Should also work with 4.x kernels (although, I haven't tested it)
 **Patch info**:  (changes made by ```install.bluetooth.sh``` are based off this patch)
 https://github.com/christophgysin/linux/commit/ddf622a0a19697af473051c8019fffc1eb66efe7
 
-
+**Discussion of Macbook bluetooth issue**  
+https://github.com/Dunedan/mbp-2016-linux/issues/29
 
 **Installation Instructions**
 -------------
