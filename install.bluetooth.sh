@@ -27,9 +27,31 @@ echo "tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linu
 tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$kernel_version/drivers/bluetooth --directory=build/
 mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
-mv $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
-cp $patch_dir/Makefile $patch_dir/hci_bcm.c $bluetooth_dir/
+cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
+cp $patch_dir/Makefile $bluetooth_dir/
 cd $bluetooth_dir
+
+########################################### patch hci_bcm.c ###############################################
+#patch hci_bcm.c according to
+#https://github.com/christophgysin/linux/commit/ddf622a0a19697af473051c8019fffc1eb66efe7
+
+
+#hci_bcm.c 
+#remove the following (consecutive) lines
+
+#       err = dev->set_device_wakeup(dev, powered);
+#       if (err)
+#               goto err_revert_shutdown;
+#
+
+sed -i '/err = dev->set_device_wakeup(dev, powered);/,+3 d' hci_bcm.c
+
+#err_revert_shutdown:
+#       dev->set_shutdown(dev, !powered);
+
+sed -i '/^err_revert_shutdown:$/,+1 d' hci_bcm.c
+###########################################################################################################
+
 make
 make install
 
