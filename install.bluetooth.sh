@@ -3,9 +3,11 @@
 kernel_version=$(uname -r | cut -d '-' -f1)  #ie 5.2.8
 major_version=$(echo $kernel_version | cut -d '.' -f1)
 minor_version=$(echo $kernel_version | cut -d '.' -f2)
-build_dir='build'
-update_dir="/lib/modules/$(uname -r)/updates"
 
+update_dir="/lib/modules/$(uname -r)/updates"
+[[ ! -d $update_dir ]] && mkdir $update_dir
+
+build_dir='build'
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
 
@@ -28,7 +30,7 @@ tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$ker
 mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
 cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
-cp $patch_dir/Makefile $bluetooth_dir/
+cp -p $patch_dir/Makefile $bluetooth_dir/
 cd $bluetooth_dir
 
 ########################################### patch hci_bcm.c ###############################################
