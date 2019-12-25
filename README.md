@@ -12,7 +12,7 @@ https://github.com/christophgysin/linux/commit/ddf622a0a19697af473051c8019fffc1e
 **Installation Instructions**
 -------------
 
-**prerequisites** 
+**prerequisites**  
 Enure the necessary packages are installed:
  
 
