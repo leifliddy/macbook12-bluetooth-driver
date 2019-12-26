@@ -1,13 +1,13 @@
 #!/bin/bash
 
-kernel_version=$(uname -r | cut -d '-' -f1)  #ie 5.2.8
+kernel_version=$(uname -r | cut -d '-' -f1)          #ie 5.2.8
 major_version=$(echo $kernel_version | cut -d '.' -f1)
 minor_version=$(echo $kernel_version | cut -d '.' -f2)
-
-update_dir="/lib/modules/$(uname -r)/updates"
-[[ ! -d $update_dir ]] && mkdir $update_dir
+kernel_short_version="$major_version.$minor_version" #ie 5.2
 
 build_dir='build'
+update_dir="/lib/modules/$(uname -r)/updates"
+
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
 
@@ -19,7 +19,7 @@ wget -c https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_
 
 if [[ $? -ne 0 ]]; then
    # if first attempt fails, attempt to download linux-x.x.tar.xz kernel
-   kernel_version=$major_version.$minor_version
+   kernel_version=$kernel_short_version
    wget -c https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz -P $build_dir
 fi
 
@@ -30,7 +30,8 @@ tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$ker
 mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
 cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
-cp -p $patch_dir/Makefile $bluetooth_dir/
+cp $patch_dir/Makefile $bluetooth_dir/
+[[ "$kernel_short_version" == '5.0' ]] || [[ "$kernel_short_version" == '5.1' ]] && cp $patch_dir/hci_bcm.kernel_5.0_5.1.c $bluetooth_dir/hci_bcm.c
 cd $bluetooth_dir
 
 ########################################### patch hci_bcm.c ###############################################
