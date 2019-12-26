@@ -7,11 +7,11 @@ kernel_short_version="$major_version.$minor_version" #ie 5.2
 
 build_dir='build'
 update_dir="/lib/modules/$(uname -r)/updates"
-[[ ! -d $update_dir ]] && mkdir $update_dir
 
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
 
+[[ ! -d $update_dir ]] && mkdir $update_dir
 [[ ! -d $build_dir ]] && mkdir $build_dir
 [[ -d $bluetooth_dir ]] && rm -rf $bluetooth_dir
 
