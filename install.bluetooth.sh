@@ -11,6 +11,7 @@ update_dir="/lib/modules/$(uname -r)/updates"
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth-$kernel_version"
 
+[[ ! -d $update_dir ]] && mkdir $update_dir
 [[ ! -d $build_dir ]] && mkdir $build_dir
 [[ -d $bluetooth_dir ]] && rm -rf $bluetooth_dir
 
@@ -31,7 +32,7 @@ mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
 cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
 cp $patch_dir/Makefile $bluetooth_dir/
-[[ "$kernel_short_version" == '5.0' ]] || [[ "$kernel_short_version" == '5.1' ]] && cp $patch_dir/hci_bcm.kernel_5.0_5.1.c $bluetooth_dir/hci_bcm.c
+[[ $(echo "$kernel_short_version" | grep '5.[0-1]') ]] && cp $patch_dir/hci_bcm.kernel_5.0_5.1.c $bluetooth_dir/hci_bcm.c
 cd $bluetooth_dir
 
 ########################################### patch hci_bcm.c ###############################################
