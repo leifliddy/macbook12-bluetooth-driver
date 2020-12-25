@@ -29,7 +29,7 @@ apt install wget make gcc linux-headers-generic
 ```
 **arch package install**
 ```
-pacman -S wget symlinks make gcc linux-headers
+pacman -S wget make gcc linux-headers
 ```
 **build and install driver**
 ```
