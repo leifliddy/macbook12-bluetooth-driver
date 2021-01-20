@@ -32,7 +32,7 @@ mv bluetooth $bluetooth_dir
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
 cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
 cp $patch_dir/Makefile $bluetooth_dir/
-[[ $(echo "$kernel_short_version" | grep '5.[0-1]') ]] && cp $patch_dir/hci_bcm.kernel_5.0_5.1.c $bluetooth_dir/hci_bcm.c
+[[ $(echo "$kernel_short_version" | grep '^5\.[0-1]$') ]] && cp $patch_dir/hci_bcm.kernel_5.0_5.1.c $bluetooth_dir/hci_bcm.c
 cd $bluetooth_dir
 
 ########################################### patch hci_bcm.c ###############################################
