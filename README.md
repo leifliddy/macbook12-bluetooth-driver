@@ -35,6 +35,7 @@ pacman -S wget make gcc linux-headers
 ```
 git clone https://github.com/leifliddy/macbook12-bluetooth-driver.git
 cd macbook12-bluetooth-driver/
+# run the following command as root or with sudo
 ./install.bluetooth.driver.sh
 reboot
 ```
