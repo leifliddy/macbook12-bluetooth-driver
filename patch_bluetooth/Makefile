@@ -16,11 +16,11 @@ hci_uart-objs				:= $(hci_uart-y)
 
 
 all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+	make -C /lib/modules/$(shell uname -r)/build M=$(shell pwd) modules
 	strip --strip-debug hci_uart.ko
 
 clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	make -C /lib/modules/$(shell uname -r)/build M=$(shell pwd) clean
 
 install:
 	cp hci_uart.ko /lib/modules/$(shell uname -r)/updates
