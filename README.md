@@ -3,8 +3,8 @@ Patch/Compile/Install bluetooth driver for:
 Macbook Pro models: 13,1 and 14,1  
 Macbook 12 inch models (2015 and later): 8,1 + 9,1 + 10,1  
 
-**Kernels supported**:  
-5.0 to 5.11
+**Kernels supported**:
+5.0 to 5.13
 
 **Patch info**:  (changes made by ```install.bluetooth.sh``` are based off this patch)
 https://github.com/christophgysin/linux/commit/ddf622a0a19697af473051c8019fffc1eb66efe7
@@ -36,7 +36,7 @@ pacman -S wget make gcc linux-headers
 git clone https://github.com/leifliddy/macbook12-bluetooth-driver.git
 cd macbook12-bluetooth-driver/
 # run the following command as root or with sudo
-./install.bluetooth.driver.sh
+./install.bluetooth.sh 
 reboot
 ```
 
