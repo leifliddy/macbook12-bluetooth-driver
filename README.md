@@ -39,7 +39,7 @@ cd macbook12-bluetooth-driver/
 ./install.bluetooth.sh 
 reboot
 ```
-**build and install driver**
+**build and install driver with DKMS**
 ```
 git clone https://github.com/leifliddy/macbook12-bluetooth-driver.git
 cd macbook12-bluetooth-driver/
