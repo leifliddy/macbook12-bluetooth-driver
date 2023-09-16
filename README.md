@@ -39,6 +39,15 @@ cd macbook12-bluetooth-driver/
 ./install.bluetooth.sh 
 reboot
 ```
+**build and install driver**
+```
+git clone https://github.com/leifliddy/macbook12-bluetooth-driver.git
+cd macbook12-bluetooth-driver/
+# run the following commands as root or with sudo
+ln -s "$(pwd)" "/usr/src/macbook12-bluetooth-0.1"
+dkms install -c ./dkms.conf -m macbook12-bluetooth/0.1 --force
+reboot
+```
 
 
 ```install.bluetooth.sh``` will auto-patch the ```hci_bcm.c``` source file and then compile and install the ```hci_uart``` module
