@@ -56,6 +56,5 @@ reboot
 ```install.bluetooth.sh``` will auto-patch the ```hci_bcm.c``` source file and then compile and install the ```hci_uart``` module
 
 
-```install.bluetooth.sh``` is designed to be run on the Macbook itself (running Linux obviously).
+```install.bluetooth.sh``` is designed to be run on the Macbook itself (running Linux obviously).  
 It will compile the ```hci_uart``` module for the currently running/active kernel (based on the ```uname -r``` output)
-However, this script can be easily modified to suit any number of use-case scenarios.
