@@ -1,14 +1,35 @@
 #!/bin/bash
-[[ -n $1 ]] && dkms=true
-[[ $dkms = true ]] && uname_r=$1 || uname_r=$(uname -r)
 
+while [ $# -gt 0 ]
+do
+    case $1 in
+    -i|--install) dkms_action='install';;
+    -k|--kernel) dkms_kernel=$2; [[ -z $dkms_kernel ]] && echo '-k|--kernel must be followed by a kernel version' && exit 1;;
+    -r|--remove) dkms_action='remove';;
+    -u|--uninstall) dkms_action='remove';;
+    (-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;;
+    (*) break;;
+    esac
+    shift
+done
+
+if [[ $dkms_action == 'install' ]]; then
+    bash dkms.sh
+    exit
+elif [[ $dkms_action == 'remove' ]]; then
+    bash dkms.sh -r
+    exit
+fi
+
+[[ -n $dkms_kernel ]] && uname_r=$dkms_kernel || uname_r=$(uname -r)
 kernel_version=$(echo $uname_r | cut -d '-' -f1) #ie 6.4.15
 
 major_version=$(echo $kernel_version | cut -d '.' -f1)
 minor_version=$(echo $kernel_version | cut -d '.' -f2)
+major_minor=${major_version}${minor_version}
 kernel_short_version="$major_version.$minor_version" #ie 5.2
 
-build_dir="build"
+build_dir="buildx"
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth"
 
@@ -29,8 +50,7 @@ fi
 # remove old kernel tar.xz archives
 find build/ -type f | grep -E linux.*.tar.xz | grep -v $kernel_version.tar.xz | xargs rm -f
 
-tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz linux-$kernel_version/drivers/bluetooth --directory=build/
-mv bluetooth $bluetooth_dir
+tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz --directory=build/ linux-$kernel_version/drivers/bluetooth
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
 cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
 cp $patch_dir/Makefile $bluetooth_dir/
@@ -58,11 +78,9 @@ sed -i '/^err_revert_shutdown:$/,+1 d' hci_bcm.c
 ###########################################################################################################
 popd > /dev/null
 
-if [[ -z $dkms ]]; then
-    update_dir="/lib/modules/$(uname -r)/updates"
-    [[ ! -d $update_dir ]] && mkdir $update_dir
-    make
-    make install
-    echo -e "\ncontents of $update_dir" && ls -lA $update_dir
-    exit 0
-fi
+update_dir="/lib/modules/$(uname -r)/updates"
+[[ ! -d $update_dir ]] && mkdir $update_dir
+make
+make install
+echo -e "\ncontents of $update_dir" && ls -lA $update_dir
+exit 0
