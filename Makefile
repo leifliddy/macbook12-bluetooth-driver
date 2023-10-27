@@ -1,16 +1,18 @@
-ifneq ($(KERNELRELEASE),)
-	KERNELDIR ?= /lib/modules/$(KERNELRELEASE)/build
+ifdef KERNELRELEASE
+	KERNELDIR := /lib/modules/$(KERNELRELEASE)
 else
-	## KERNELRELEASE not set.
-	KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+	KERNELDIR := /lib/modules/$(shell uname -r)
 endif
 
-all:
-	make -C $(KERNELDIR) M=$(shell pwd)/build/bluetooth modules
-clean:
-	make -C $(KERNELDIR) M=$(shell pwd)/build/bluetooth clean
+KERNELBUILD := $(KERNELDIR)/build
 
-ifeq ($(KERNELRELEASE),)
+all:
+	make -C $(KERNELBUILD) M=$(shell pwd)/build/bluetooth modules
+
+clean:
+	make -C $(KERNELBUILD) M=$(shell pwd)/build/bluetooth clean
+
+ifndef KERNELRELEASE
 install:
 	cp $(shell pwd)/build/bluetooth/hci_uart.ko /lib/modules/$(shell uname -r)/updates
 	depmod -a
