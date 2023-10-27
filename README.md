@@ -33,16 +33,15 @@ pacman -S dkms gcc make linux-headers wget
 ```
 1. **build and install dkms module** (experimental feature)  
 this will build the module for the current/active kernel  
-and "should" auto-compile this module whenever you install a newer kernel  
+and will auto-compile this module whenever you install a newer kernel  
 ```
 git clone https://github.com/leifliddy/macbook12-bluetooth-driver.git
 cd macbook12-bluetooth-driver/
 # run the following command as root or with sudo
-./install.dkms.sh
-reboot
+./install.bluetooth.sh -i
 
 # to uninstall the dkms feature run:
-./install.dkms.sh -u
+./install.bluetooth.sh -u
 ```
 
 2. (backup method if dkms didn't work) **manually build and install module for current kernel**
