@@ -29,7 +29,7 @@ minor_version=$(echo $kernel_version | cut -d '.' -f2)
 major_minor=${major_version}${minor_version}
 kernel_short_version="$major_version.$minor_version" #ie 5.2
 
-build_dir="buildx"
+build_dir="build"
 patch_dir='patch_bluetooth'
 bluetooth_dir="$build_dir/bluetooth"
 
