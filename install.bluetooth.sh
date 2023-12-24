@@ -47,10 +47,9 @@ if [[ $? -ne 0 ]]; then
    wget -c "$KERNEL_DOWNLOAD_TAR_URL" -P $build_dir
 fi
 
-#######################
-[[ $? -ne 0 ]] && echo "kernel could not be downloaded... Retry by manually writing the url of the kernel tar file." &&
-# Block to get the url from the user
-{ read -p "IMPORTANT:
+# if second attemps fails, attemp to download kernel from url provided by the script user
+[[ $? -ne 0 ]] &&
+{ echo "kernel could not be downloaded... Retry by manually writing the url of the kernel tar file." && read -p "IMPORTANT:
 
 So far, the download of the tar file failed... But : 
 
@@ -58,22 +57,23 @@ If you are using a custom kernel (as for example the 'mainline'),
 please carefully copy/paste the link to the tarball (format tar.xz or tar.gz) file here and then type 'enter'.
 
 Be cautious, this is custom script adaptation without further checks...
-" KERNEL_DOWNLOAD_TAR_URL
-} && wget -c "$KERNEL_DOWNLOAD_TAR_URL" -P $build_dir &&
-# Customization for special kernel
-# 2 customizations :
-#    get the extension of tar file (+'tar.') : so tar.xz or tar.gz
-#    get the kernel version is special kernel
-{ END_OF_TAR_FILE="${KERNEL_DOWNLOAD_TAR_URL%/}" # remove eventual ending slash
-  BEGINNING_OF_URL_WITHOUT_END="${END_OF_TAR_FILE%tar.*}"
-  END_OF_TAR_FILE="${END_OF_TAR_FILE##$BEGINNING_OF_URL_WITHOUT_END}"
-  kernel_version="${BEGINNING_OF_URL_WITHOUT_END##*/}"
-  kernel_version="${kernel_version##linux-}" # removing the 'linux-'
-  kernel_version="${kernel_version%.}" # removing any eventual ending dot
+" KERNEL_DOWNLOAD_TAR_URL && wget -c "$KERNEL_DOWNLOAD_TAR_URL" -P $build_dir && FLAG_URL_PROVIDED_BY_USER="true"
+# Test is the third attempt to 'wget' returned an error and exit if so
+[[ $? -ne 0 ]] && echo "the custom kernel could not be downloaded...exiting" && exit
 }
 
-# Test is wget returned an error and exit if so
-[[ $? -ne 0 ]] && echo "the custom kernel could not be downloaded...exiting" && exit
+# Get the extension of tar file (+'tar.') : so tar.xz or tar.gz
+END_OF_TAR_FILE="${KERNEL_DOWNLOAD_TAR_URL%/}" # remove eventual ending slash
+BEGINNING_OF_URL_WITHOUT_END="${END_OF_TAR_FILE%tar.*}"
+END_OF_TAR_FILE="${END_OF_TAR_FILE##$BEGINNING_OF_URL_WITHOUT_END}"
+
+# Get the kernel version if it is special kernel or if provided manually
+if [ "$FLAG_URL_PROVIDED_BY_USER" = "true" ]
+then
+    kernel_version="${BEGINNING_OF_URL_WITHOUT_END##*/}"
+    kernel_version="${kernel_version##linux-}" # removing the 'linux-'
+    kernel_version="${kernel_version%.}" # removing any eventual ending dot
+fi
 
 # remove old kernel tar.xz archives
 find build/ -type f | grep -E linux.*.${END_OF_TAR_FILE} | grep -v $kernel_version.${END_OF_TAR_FILE} | xargs rm -f
