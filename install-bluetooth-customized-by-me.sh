@@ -37,20 +37,49 @@ bluetooth_dir="$build_dir/bluetooth"
 [[ ! -d $build_dir ]] && mkdir $build_dir
 
 # attempt to download linux-x.x.x.tar.xz kernel
-wget -c https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz -P $build_dir
+KERNEL_DOWNLOAD_TAR_URL="https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz"
+wget -c "$KERNEL_DOWNLOAD_TAR_URL" -P $build_dir
 
 if [[ $? -ne 0 ]]; then
    # if first attempt fails, attempt to download linux-x.x.tar.xz kernel
    kernel_version=$kernel_short_version
-   wget -c https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz -P $build_dir
+   KERNEL_DOWNLOAD_TAR_URL="https://cdn.kernel.org/pub/linux/kernel/v$major_version.x/linux-$kernel_version.tar.xz"
+   wget -c "$KERNEL_DOWNLOAD_TAR_URL" -P $build_dir
 fi
 
-[[ $? -ne 0 ]] && echo "kernel could not be downloaded...exiting" && exit
+# if second attemps fails, attemp to download kernel from url provided by the script user
+[[ $? -ne 0 ]] &&
+{ echo "kernel could not be downloaded... Retry by manually writing the url of the kernel tar file." && read -p "IMPORTANT:
+
+So far, the download of the tar file failed... But : 
+
+If you are using a custom kernel (as for example the 'mainline'),
+please carefully copy/paste the link to the tarball (format tar.xz or tar.gz) file here and then type 'enter'.
+
+Be cautious, this is custom script adaptation without further checks...
+" KERNEL_DOWNLOAD_TAR_URL && wget -c "$KERNEL_DOWNLOAD_TAR_URL" -P $build_dir && FLAG_URL_PROVIDED_BY_USER="true"
+# Test is the third attempt to 'wget' returned an error and exit if so
+[[ $? -ne 0 ]] && echo "the custom kernel could not be downloaded...exiting" && exit
+}
+
+# Get the extension of tar file (+'tar.') : so tar.xz or tar.gz
+END_OF_TAR_FILE="${KERNEL_DOWNLOAD_TAR_URL%/}" # remove eventual ending slash
+BEGINNING_OF_URL_WITHOUT_END="${END_OF_TAR_FILE%tar.*}"
+END_OF_TAR_FILE="${END_OF_TAR_FILE##$BEGINNING_OF_URL_WITHOUT_END}"
+
+# Get the kernel version if it is special kernel or if provided manually
+if [ "$FLAG_URL_PROVIDED_BY_USER" = "true" ]
+then
+    kernel_version="${BEGINNING_OF_URL_WITHOUT_END##*/}"
+    kernel_version="${kernel_version##linux-}" # removing the 'linux-'
+    kernel_version="${kernel_version%.}" # removing any eventual ending dot
+fi
 
 # remove old kernel tar.xz archives
-find build/ -type f | grep -E linux.*.tar.xz | grep -v $kernel_version.tar.xz | xargs rm -f
+find build/ -type f | grep -E linux.*.${END_OF_TAR_FILE} | grep -v $kernel_version.${END_OF_TAR_FILE} | xargs rm -f
 
-tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.tar.xz --directory=build/ linux-$kernel_version/drivers/bluetooth
+tar --strip-components=2 -xvf $build_dir/linux-$kernel_version.${END_OF_TAR_FILE} --directory=build/ linux-$kernel_version/drivers/bluetooth
+
 mv $bluetooth_dir/Makefile $bluetooth_dir/Makefile.orig
 cp -p $bluetooth_dir/hci_bcm.c $bluetooth_dir/hci_bcm.c.orig
 cp $patch_dir/Makefile $bluetooth_dir/
