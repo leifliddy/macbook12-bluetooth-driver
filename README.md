@@ -1,5 +1,16 @@
 Patch/Compile/Install bluetooth driver for:
 
+############## MY PERSONAL REMARKS ########################
+
+I customized the installation script in order to support any linux kernel, for example the 'linux-mainline' as well as the 'linux-libre' with the possibility for the user to provide the website link to download the tar file of his custom linux kernel. For further information, check the comments of my customized script which explains in details the changes and enhancement.
+
+To use it, only need to run the custom script with sudo from this repo.
+
+For the moment, it works (successfully tested) with :
+- Arch Linux
+
+############## REMARKS FROM THE OFFICIAL DIR ##############
+
 Macbook Pro models: 13,1 and 14,1
 Macbook 12 inch models (2015 and later): 8,1 + 9,1 + 10,1
 
